@@ -1,0 +1,72 @@
+#summary Manage your friends, befriend your manager!
+
+= Introduction =
+
+Add your content here.
+
+= Details =
+
+friend management
+
+current development:
+
+    * add "reconnect" button to disconnected friends 
+
+alpha implementation:
+
+    * invite (nonce) creation from webpage
+    * saves nonce into database with expiration date
+    * send nonce with connect string, from connect field on webpage
+    * add nonce field to hello packet
+    * check nonce field if hello packet references unknown user
+    * if nonce field valid: add user, invalidate nonce
+    * else: leave nonce, break connection 
+
+goals/vision:
+
+launch tryst, know that friend is online with tryst running no central server managed by tryst
+
+tryst: tryst has generic plugin functionality for "signin friends" api
+
+plugins:
+
+each plugin (jabber, facebook?) is responsible for reporting the ip address of people on your respective friends list
+
+security: need to be able to verify friends
+
+current/dumb: connect to ip as specified
+
+friend discovery
+
+    * email
+    * contains link to local tryst web server
+    * link sends nonce 
+
+friend authentication
+
+    * three-way handshake, shared key
+    * all of this is encapsulated in "first connection"
+    * first connection is handled at friend discovery 
+
+friend rediscovery
+
+    * leverage friend network?
+    * build friend network 
+
+friend dediscovery/defriending
+
+    * leverage friend network 
+
+implementable:
+
+    * enter friend email address into local tryst
+    * generates & sends email to friend
+    * email contains link to friend's local tryst server on default * port / copy and paste link into new friend request page
+    * link contains some invitekey
+    * invitekey: target ip address and random number (nonce) that is valid for 24h
+    * target clicks link / pastes nonce into tryst
+    * target tryst sends nonce back to local tryst over ssl
+    * ssl connection sends certificates which are then whitelisted
+    * for all future normal connections 
+
+Page last modified on October 10, 2007, at 11:23 PM
