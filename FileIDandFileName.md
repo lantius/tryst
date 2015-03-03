@@ -1,0 +1,92 @@
+# Introduction #
+
+Hopefully solving the fileid/filename problem for the last time
+
+# Details #
+
+SYNCHRONIZATION:
+
+A: request root from B
+B: send root fileid to B
+A: compare current stored root for B with sent root
+> IF match THEN done
+> ELSE
+A: request children of root
+B: send back (fileid,filename) pairs of children.  filename is full path.
+A: compare each each sent fileid to stored fileids
+
+/**ALTERNATE SOLUTION**/
+> FOR EACH sent\_filename
+> > IF filename match THEN
+> > > compare the fileids, see if the content has changed
+> > > mark filename as seen
+> > > IF fileid matches THEN
+> > > > same file
+
+> > > ELSE
+> > > > update\_file
+> > > > request\_children
+
+> > > END IF
+
+> > ELSE
+> > > add\_file
+> > > request\_children
+
+> > END IF
+
+> NEXT
+
+> FOR EACH filename
+> > IF NOT seen
+> > > DELETE filename
+
+> > END IF
+
+> NEXT
+
+Store.cc:
+**get\_file\_by\_filename** get\_children\_by\_filename
+**remove\_file\_by\_filename (recursive!)**
+
+
+
+
+/**alternate wrong original solution!!!**/
+> FOR EACH sent\_fileid
+> > IF fileid match THEN
+> > > compare the filename with the filenames associated with that fileid
+> > > IF filename match THEN
+> > > > same file!
+> > > > mark fileid(filename) as seen.
+
+> > > ELSE
+> > > > rename/add.
+> > > > add file.
+> > > > doesn't mark fileid(filename). // will delete at cleanup
+
+> > > END IF
+
+> > ELSE
+> > > IF filename match THEN
+> > > > file changed.
+> > > > add file.
+
+> > > ELSE
+> > > > new file!
+> > > > add file.
+
+> > > END IF
+> > > request children of this file, if any, by sending the filename.
+
+> > END IF
+
+> NEXT
+
+> FOR EACH filename IN fileid.listfilenames
+> > IF not seen filename THEN
+> > > delete filename
+
+> > END IF
+
+> NEXT
